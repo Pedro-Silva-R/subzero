@@ -1,0 +1,274 @@
+1. Contexto y objetivo
+Crea la pantalla principal de una PWA de gestión de suscripciones personales.
+El usuario quiere ver de un vistazo:
+
+Cuánto tiene comprometido al mes / año.
+
+Qué viene pronto.
+
+Qué suscripciones son más “problemáticas”.
+
+El estilo visual debe ser neobrutalismo utilitario: bordes negros gruesos, bloques bien definidos, sin tarjetas genéricas con sombra suave ni gradiente azul‑morado.
+
+2. Estilo global
+Tipografía
+
+Heading / UI general: Space Grotesk (sans geométrica).
+
+Usar pesos 500–700 para títulos, 400 para labels y texto corto.
+
+Números y datos (montos, fechas, IDs): Fira Code (monoespaciada).
+
+Montos y cifras importantes siempre en Fira Code para reforzar la sensación de “dato contable”.
+
+Paleta de colores
+
+Fondo base app: #F4F1EC (gris cálido muy claro).
+
+Texto principal: #18181B.
+
+Acento principal / CTA: #FF5A1F (naranja intenso).
+
+Estado “alerta/zombie”: #D7263D (rojo ladrillo).
+
+Estado “ok/activa”: #1E8E4D (verde mate).
+
+Fondos de bloques secundarios: #FFFFFF y un gris muy claro #F3F4F6 para alternar filas.
+
+Tratamiento visual (neobrutalismo)
+
+Bordes:
+
+La mayoría de los bloques (cards, filas, badges) con borde negro de 2–3 px.
+
+Sombras:
+
+Si se usan, que sean sombras duras sin blur, desplazadas 2–4 px, no sombras suaves difusas.
+
+Nada de gradientes azules/morados genéricos ni “cards” de UI kits estándar.
+
+3. Estructura semántica y layout (mobile‑first)
+Usar HTML semántico y pensar mobile‑first.
+
+Estructura base
+
+Contenedor raíz: <main>
+
+Dentro, en orden:
+
+<header>
+
+Sección resumen: <section> (Resumen de compromiso).
+
+Sección alertas: <section> (Alertas y zombies).
+
+Sección próximos cobros: <section> (Próximos cobros).
+
+Lista de suscripciones: <section> (Lista principal).
+
+Botón de agregar (puede ir dentro de <section> o como elemento fijo asociado a <main>).
+
+Jerarquía de encabezados
+
+H1: título principal de la pantalla (“Suscripciones” o similar).
+
+H2: títulos de bloques (“Resumen de compromiso”, “Alertas”, “Próximos cobros”, “Suscripciones”).
+
+No saltar niveles (H1 → H2 → H3, sin H4 si no hace falta).
+
+Layout en mobile (base)
+
+Disposición vertical, bloques apilados con espaciado generoso (gap vertical).
+
+Padding lateral cómodo (ej. 16–20 px).
+
+Tipografía con tamaños fluidos usando clamp() (por ejemplo, headings y montos).
+
+Layout en desktop
+
+A partir de un ancho aproximado de 1024 px:
+
+Fila superior:
+
+Columna izquierda: Resumen de compromiso.
+
+Columna derecha: Próximos cobros.
+
+Debajo:
+
+Alertas y zombies.
+
+Lista de suscripciones ocupando el ancho completo.
+
+Usar CSS Grid o Flex para esta reorganización, sin anchos fijos (width: 500px prohibido).
+
+4. Bloques y componentes
+4.1. Header
+Semántica: <header> con el H1.
+
+Contenido:
+
+H1 (Space Grotesk): “Suscripciones” (o “Sin Sorpresas Mensuales”).
+
+Subtítulo pequeño (párrafo o small): “Resumen de [mes] [año]”.
+
+Estilo
+
+Sin caja fancy: puede ser simplemente texto en la parte superior, con un borde inferior negro de 2 px para separarlo del contenido.
+
+4.2. Bloque “Resumen de compromiso”
+Semántica: <section aria-labelledby="resumen-heading">.
+
+Contenido:
+
+H2 (id="resumen-heading"): “Resumen de compromiso”.
+
+Texto en Fira Code grande:
+
+“Comprometido este mes” + monto (p.ej. $120.000).
+
+Texto más pequeño con total anual (equivalente):
+
+“Equivalente anual: $X”.
+
+Pequeño desglose por persona (puede ser 2–3 etiquetas):
+
+“Yo: $XX.XXX”, “Pareja: $YY.YYY”, “Familia: $ZZ.ZZZ”.
+
+Estilo visual
+
+Bloque rectangular de ancho completo (o columna en desktop).
+
+Fondo naranja claro (puedes derivarlo de #FF5A1F bajando saturación), texto oscuro.
+
+Borde negro de 3 px, sin sombra o con sombra dura mínima.
+
+Montos en Fira Code grande, centrados o alineados a la izquierda con amplio espacio.
+
+4.3. Bloque “Alertas y zombies”
+Semántica: <section aria-labelledby="alertas-heading">.
+
+Contenido:
+
+H2: “Alertas”.
+
+Dentro, 2–3 “chips”/cards horizontales:
+
+Trials: “Pruebas que terminan pronto: N”.
+
+Zombies: “Suscripciones problemáticas: M”.
+
+Opcional: “Revisar más tarde”, etc.
+
+Estilo
+
+Cada “chip” es una mini card: fondo blanco, borde negro 2 px, ligera sombra dura opcional.
+
+Texto en Space Grotesk; cifra principal en Fira Code.
+
+Zombie: usar color de acento rojo ladrillo para icono, borde o detalle del chip.
+
+4.4. Bloque “Próximos cobros”
+Semántica: <section aria-labelledby="proximos-heading">.
+
+Contenido:
+
+H2: “Próximos cobros”.
+
+Lista de 3–5 elementos, usando <ul> y <li>:
+
+Para cada cobro: fecha, nombre de suscripción, monto (Fira Code), método de pago (texto corto), con quién se comparte.
+
+Estilo
+
+Bloque con fondo blanco o gris claro, borde negro 2 px.
+
+Fila tipo “list item” con línea divisoria dura entre elementos.
+
+Fechas y montos alineados para lectura rápida (ej. por la derecha).
+
+4.5. Lista principal de suscripciones
+Semántica: <section aria-labelledby="suscripciones-heading">.
+
+Dentro:
+
+H2: “Suscripciones”.
+
+Lista de suscripciones, idealmente <ul> de <li>; cada <li> representa una suscripción.
+
+Contenido por suscripción (fila/card)
+
+Columna izquierda:
+
+Nombre de la suscripción (Space Grotesk, tamaño medio/grande).
+
+Debajo, texto pequeño: categoría y “con quién compartes” (ej. “Streaming · Yo + Pareja”).
+
+Columna central:
+
+Monto y ciclo (Fira Code):
+
+$XX.XXX / mes o $YY.YYY / año.
+
+Método de pago (texto corto).
+
+Columna derecha:
+
+Próxima fecha de cobro (Fira Code).
+
+Badge de estado: TRIAL, ACTIVA, ZOMBIE, PAUSADA.
+
+Estilo visual de la fila
+
+Cada fila es un bloque rectángulo:
+
+Fondo blanco (#FFFFFF) o gris muy claro (#F3F4F6), borde negro 1–2 px.
+
+Filas alternadas con sutil cambio de fondo para mejorar legibilidad.
+
+Badges de estado:
+
+Formato pill rectangular (no redondeos extremos), borde negro, relleno según estado:
+
+TRIAL: amarillo pálido.
+
+ZOMBIE: rojo ladrillo.
+
+ACTIVA: verde mate.
+
+Interacción
+
+Toda la fila debe ser clicable/tappable (abrirá pantalla de detalle).
+
+Si se agrega un botón de menú (tres puntos), debe tener aria-label claro (aria-label="Opciones de suscripción X").
+
+4.6. Botón “Agregar suscripción”
+Semántica: <button> con texto visible “Agregar suscripción”.
+
+Idealmente fijo en la esquina inferior derecha en mobile (FAB rectangular) o prominente al final/arriba de la lista.
+
+Estilo
+
+Botón rectangular, no demasiadas curvas.
+
+Fondo #FF5A1F, texto negro, borde negro grueso (2–3 px).
+
+Ícono “+” simple a la izquierda del texto.
+
+5. Accesibilidad y UX
+Asegurarse de que todo texto en botones y links sea claro; si se usan iconos solos, añadir aria-label.
+
+Contraste color de texto/fondo mínimo WCAG AA.
+
+Navegación por teclado:
+
+Orden lógico de tabindex.
+
+:focus visible en botones y elementos interactivos (puede ser un outline negro grueso o similar).
+
+Pensar en estados :hover, :focus y :active con pequeñas transiciones (0.15–0.2s) en transform/border/fondo; nada exagerado, pero que la interfaz se sienta viva.
+
+6. Responsividad
+Mobile‑first: partir en ~320 px de ancho, verificar que los bloques no se rompan (especialmente el resumen y las filas de la lista).
+
+Para pantallas anchas, usar Grid/Flex para crear la disposición de 2 columnas superior y mantener el resto apilado de forma lógica.
