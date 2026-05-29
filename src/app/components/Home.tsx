@@ -520,15 +520,6 @@ export default function Home() {
                       </p>
                       <StatusBadge status={sub.status} />
                     </div>
-                    <button
-                      aria-label={`Opciones de suscripción ${sub.name}`}
-                      className="p-2 hover:bg-foreground/10 rounded transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <MoreVertical className="h-5 w-5" />
-                    </button>
                   </div>
                 </div>
               </li>
