@@ -66,6 +66,7 @@ export interface Database {
           payment_notes: string | null;
           notes: string | null;
           price_history: PriceHistoryEntry[];
+          payment_history: string[];
           created_at: string;
         };
         Insert: {
@@ -86,6 +87,7 @@ export interface Database {
           payment_notes?: string | null;
           notes?: string | null;
           price_history?: PriceHistoryEntry[];
+          payment_history?: string[];
           created_at?: string;
         };
         Update: {
@@ -106,6 +108,7 @@ export interface Database {
           payment_notes?: string | null;
           notes?: string | null;
           price_history?: PriceHistoryEntry[];
+          payment_history?: string[];
           created_at?: string;
         };
         Relationships: [];

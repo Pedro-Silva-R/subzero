@@ -41,6 +41,7 @@ export interface Subscription {
   paymentNotes: string;
   notes: string;
   priceHistory: PriceHistoryEntry[];
+  paymentHistory: string[];
 }
 
 export interface PaymentMethod {
@@ -78,6 +79,7 @@ function mapSubscription(
     paymentNotes: row.payment_notes ?? '',
     notes: row.notes ?? '',
     priceHistory: (row.price_history as PriceHistoryEntry[]) ?? [],
+    paymentHistory: row.payment_history ?? [],
   };
 }
 
@@ -221,6 +223,8 @@ export const getSummaryData = async () => {
     amount: s.amount,
     paymentMethod: s.paymentMethodName,
     sharedWith: s.sharedWith.length > 0 ? s.sharedWith.join(' + ') : 'Yo',
+    paymentHistory: s.paymentHistory,
+    cycle: s.cycle,
   })).sort((a, b) => {
     if (!a.date) return 1;
     if (!b.date) return -1;
@@ -365,3 +369,77 @@ export const clearAllLocalData = async (): Promise<{ success: boolean }> => {
   localStorage.removeItem('subzero_settings');
   return { success: true };
 };
+
+// ── Pagos e Historial ─────────────────────────────────────────
+
+function getNextChargeDate(currentDateStr: string, cycle: string): string {
+  if (!currentDateStr) return '';
+  const date = new Date(currentDateStr + 'T12:00:00Z'); // Evitar problemas de zona horaria
+  if (isNaN(date.getTime())) return '';
+
+  if (cycle === 'Mensual') {
+    date.setUTCMonth(date.getUTCMonth() + 1);
+  } else if (cycle === 'Anual') {
+    date.setUTCFullYear(date.getUTCFullYear() + 1);
+  } else if (cycle === 'Semanal') {
+    date.setUTCDate(date.getUTCDate() + 7);
+  } else if (cycle === 'Trimestral') {
+    date.setUTCMonth(date.getUTCMonth() + 3);
+  } else if (cycle === 'Semestral') {
+    date.setUTCMonth(date.getUTCMonth() + 6);
+  } else {
+    // Fallback por defecto, sumar 1 mes
+    date.setUTCMonth(date.getUTCMonth() + 1);
+  }
+  return date.toISOString().split('T')[0];
+}
+
+export const markSubscriptionAsPaid = async (
+  id: string,
+  monthStr: string, // ej. '2026-05'
+  currentNextChargeDate: string,
+  cycle: string,
+  currentHistory: string[]
+): Promise<{ success: boolean; newNextChargeDate: string; newHistory: string[] }> => {
+  const newNextChargeDate = getNextChargeDate(currentNextChargeDate, cycle);
+  const newHistory = Array.from(new Set([...currentHistory, monthStr]));
+
+  const { error } = await supabase
+    .from('subscriptions')
+    .update({
+      next_charge_date: newNextChargeDate,
+      payment_history: newHistory,
+    } as any)
+    .eq('id', id)
+    .eq('user_id', DEV_USER_ID);
+
+  if (error) throw error;
+  
+  return { success: true, newNextChargeDate, newHistory };
+};
+
+export const toggleHistoryMonth = async (
+  id: string,
+  monthStr: string,
+  currentHistory: string[]
+): Promise<{ success: boolean; newHistory: string[] }> => {
+  let newHistory = [...currentHistory];
+  if (newHistory.includes(monthStr)) {
+    newHistory = newHistory.filter(m => m !== monthStr);
+  } else {
+    newHistory.push(monthStr);
+  }
+
+  const { error } = await supabase
+    .from('subscriptions')
+    .update({
+      payment_history: newHistory,
+    } as any)
+    .eq('id', id)
+    .eq('user_id', DEV_USER_ID);
+
+  if (error) throw error;
+  
+  return { success: true, newHistory };
+};
+
