@@ -6,7 +6,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    '[SubZero] Faltan variables de entorno de Supabase. ' +
+    '[Sus_App] Faltan variables de entorno de Supabase. ' +
     'Asegúrate de tener VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en tu .env.local'
   );
 }

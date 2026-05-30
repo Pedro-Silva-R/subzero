@@ -83,7 +83,7 @@ export default function Settings() {
       ]);
       
       const backupData = {
-        app: 'SubZero',
+        app: 'Sus_App',
         version: '1.0.0',
         exportedAt: new Date().toISOString(),
         settings,
@@ -96,7 +96,7 @@ export default function Settings() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `subzero_backup_${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `susapp_backup_${new Date().toISOString().split('T')[0]}.json`;
       link.click();
       URL.revokeObjectURL(url);
       

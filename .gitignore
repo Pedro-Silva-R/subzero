@@ -36,6 +36,9 @@ bower_components
 node_modules/
 jspm_packages/
 
+# Extras
+extras/
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 

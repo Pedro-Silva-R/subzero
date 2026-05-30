@@ -1,6 +1,6 @@
 // ============================================================
 // database.types.ts — Tipos generados manualmente basados en
-// el esquema de Supabase de SubZero (Fase de Desarrollo).
+// el esquema de Supabase de Sus_App (Fase de Desarrollo).
 // Cuando se active la CLI de Supabase en producción, este
 // archivo puede regenerarse con:
 //   pnpm supabase gen types typescript --project-id <id>

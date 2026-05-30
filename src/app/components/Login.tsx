@@ -39,7 +39,7 @@ export default function Login() {
       <div className="w-full max-w-md">
         {/* Logo / Título */}
         <div className="mb-8 text-center">
-          <h1 className="mb-2">SubZero</h1>
+          <h1 className="mb-2">Sus_App</h1>
           <p className="text-sm text-foreground/60">
             {mode === 'login' ? 'Inicia sesión para continuar' : 'Crea tu cuenta'}
           </p>

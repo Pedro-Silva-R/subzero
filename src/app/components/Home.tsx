@@ -225,7 +225,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1">
             <h1 className="mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
-              SubZero
+              Sus_App
             </h1>
             <p className="text-sm text-foreground/70">
               {settings.language === 'en' ? 'Summary of' : 'Resumen de'} {monthYear}
